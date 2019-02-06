@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">HouseOfCode</string>
     <string name="light_blue">#87CEFA</string>
+    <string name="facebook_app_id">537469210081522</string>
+    <string name="fb_login_protocol_scheme">fb537469210081522</string>
+
 </resources>

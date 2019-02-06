@@ -1,9 +1,12 @@
 package com.example.benjamin_pc.houseofcode;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+
+import com.facebook.login.Login;
 
 import gr.net.maroulis.library.EasySplashScreen;
 
@@ -14,7 +17,8 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EasySplashScreen config = new EasySplashScreen(SplashScreen.this    )
                 .withFullScreen()
-                .withTargetActivity(ChatActivity.class)
+                .withTargetActivity(LoginActivity.class)
+                //TODO: ændre hvis brugeren er logget in
                 .withBackgroundColor(Color.parseColor(getString(R.string.light_blue)))
                 .withLogo(R.drawable.chatroom)
                 .withHeaderText("ChatRoom Til House of Code");
@@ -27,5 +31,6 @@ public class SplashScreen extends AppCompatActivity {
 
         //Set view to content view
         setContentView(view);
+
     }
 }

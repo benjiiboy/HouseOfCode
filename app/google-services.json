@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "341715380949",
+    "firebase_url": "https://houseofcode-f0573.firebaseio.com",
+    "project_id": "houseofcode-f0573",
+    "storage_bucket": "houseofcode-f0573.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:341715380949:android:58690d1ec1fe2109",
+        "android_client_info": {
+          "package_name": "com.example.benjamin_pc.houseofcode"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "341715380949-q9u0m38stu5tllc5a63c2ie4gkfgfpa7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.benjamin_pc.houseofcode",
+            "certificate_hash": "b547ad1a9f66912cd90394769a8f845f30f743ab"
+          }
+        },
+        {
+          "client_id": "341715380949-i3jdljtmidp2tgtonrole8i65sknboq5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKAiI5HQ9FlBax-eyz9bLjsJ8B0Kifph4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "341715380949-i3jdljtmidp2tgtonrole8i65sknboq5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,5 +1,6 @@
 package com.example.benjamin_pc.houseofcode;
 
+import android.content.Context;
 import android.content.Intent;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -32,6 +34,7 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
     private String chatroomName;
     private DatabaseReference rootDatabase, chatmessageRef;
     EditText editText;
+    ValueEventListener valueEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +50,7 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
 
 
         //Listener to firebase database
-        final ValueEventListener valueEventListener = new ValueEventListener() {
+        valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 MessageList.clear();
@@ -83,9 +86,10 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
         ChatMessage chatMessage = new ChatMessage(name,date ,text);
         chatmessageRef.child(timeinmilis.toString()).setValue(chatMessage);
         editText.setText("");
-        //TODO: fjern fokus
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
         Toast.makeText(this, "Kommentar oprettet", Toast.LENGTH_SHORT).show();
-
+        chatmessageRef.addListenerForSingleValueEvent(valueEventListener);
         //TODO: update
 
     }

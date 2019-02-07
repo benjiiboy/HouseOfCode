@@ -23,7 +23,6 @@ import java.util.ArrayList;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private TextView chatroomName, chatroomDescription;
     private ListView mainListView;
     public static final ArrayList<ChatRoom> ChatRoomList = new ArrayList<>();
     private DatabaseReference rootDatabase, chatroomRef;
@@ -35,8 +34,6 @@ public class ChatActivity extends AppCompatActivity {
 
         rootDatabase = FirebaseDatabase.getInstance().getReference();
         chatroomRef = rootDatabase.child("Chatroom");
-        chatroomDescription =(TextView) findViewById(R.id.chatroom_txtDescription);
-        chatroomName = (TextView) findViewById(R.id.chatroom_txtName);
         mainListView = findViewById(R.id.chat_ListView);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.pullToRefresh);
 
@@ -88,5 +85,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
 }

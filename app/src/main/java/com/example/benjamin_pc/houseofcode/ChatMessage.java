@@ -7,9 +7,9 @@ import com.google.firebase.database.DataSnapshot;
 
 public class ChatMessage {
 
-    private String Name;
-    private String Created;
-    private String Text;
+    private String name;
+    private String date;
+    private String text;
     private Bitmap Photo;
 
     public ChatMessage(){
@@ -17,22 +17,22 @@ public class ChatMessage {
     }
 
     public ChatMessage(String name, String date, String text){
-        this.Name = name;
-        this.Created = date;
-        this.Text = text;
+        this.name = name;
+        this.date = date;
+        this.text = text;
     }
 
-    public String getName(){return Name;}
+    public String getName(){return name;}
 
-    public void setName(String name){this.Name = name;}
+    public void setName(String name){this.name = name;}
 
-    public String getDate(){return Created;}
+    public String getDate(){return date;}
 
-    public  void  setDate(String date){this.Created = date;}
+    public  void  setDate(String date){this.date = date;}
 
-    public String getText(){return Text;}
+    public String getText(){return text;}
 
-    public void setText(String text){this.Text = text;}
+    public void setText(String text){this.text = text;}
 
 
 

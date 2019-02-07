@@ -1,33 +1,44 @@
 package com.example.benjamin_pc.houseofcode;
 
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.Profile;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class SpecifikChatRoomActivity extends AppCompatActivity {
     private ListView SpecifikListView;
     public static final ArrayList<ChatMessage> MessageList = new ArrayList<>();
     private String chatroomName;
     private DatabaseReference rootDatabase, chatmessageRef;
+    EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_specifik_chat_room);
         SpecifikListView = findViewById(R.id.specifikchat_ListView);
+        editText = (EditText) findViewById(R.id.specifikchat_edittext);
 
         Intent intent = getIntent();
         chatroomName = (String) intent.getSerializableExtra("ChatRoomName");
@@ -50,14 +61,42 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
         };
         chatmessageRef.addListenerForSingleValueEvent(valueEventListener);
 
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                SendMessage();
+                return true;
+            }
+        });
     }
+
+    public void SendMessage(){
+        String name = Profile.getCurrentProfile().getName();
+        Date Calanderdate = Calendar.getInstance().getTime();
+        Long timeinmilis = Calendar.getInstance().getTimeInMillis();
+
+
+        String text = editText.getText().toString();
+        SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/YYYY HH:mm");
+        String date = sdf.format(Calanderdate);
+
+        ChatMessage chatMessage = new ChatMessage(name,date ,text);
+        chatmessageRef.child(timeinmilis.toString()).setValue(chatMessage);
+        editText.setText("");
+        //TODO: fjern fokus
+        Toast.makeText(this, "Kommentar oprettet", Toast.LENGTH_SHORT).show();
+
+        //TODO: update
+
+    }
+
 
     public void getData(DataSnapshot dataSnapshot){
         for (DataSnapshot ds : dataSnapshot.getChildren()){
-            String created = ds.child("Created").getValue(String.class);
-            String name = ds.child("Name").getValue(String.class);
-            String txt = ds.child("Text").getValue(String.class);
-            MessageList.add(new ChatMessage(name, created, txt));
+            String date = ds.child("date").getValue(String.class);
+            String name = ds.child("name").getValue(String.class);
+            String text = ds.child("text").getValue(String.class);
+            MessageList.add(new ChatMessage(name, date, text));
         }
 
         SpecifikListView.setAdapter(new ChatMessageAdapter(SpecifikChatRoomActivity.this, MessageList));

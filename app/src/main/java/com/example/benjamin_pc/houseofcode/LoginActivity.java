@@ -28,13 +28,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //is user loggedin
-        //AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        //boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
-
-
-        //Later do actual login
-        //LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+        if (AccessToken.getCurrentAccessToken()!=null){
+            Intent intent = new Intent(this, ChatActivity.class);
+            startActivity(intent);
+        }
 
         //Facebook login
         LoginManager.getInstance().registerCallback(callbackManager,

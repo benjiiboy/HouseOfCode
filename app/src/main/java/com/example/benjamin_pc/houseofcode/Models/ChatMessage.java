@@ -1,4 +1,4 @@
-package com.example.benjamin_pc.houseofcode;
+package com.example.benjamin_pc.houseofcode.Models;
 
 import android.graphics.Bitmap;
 import android.widget.TextView;

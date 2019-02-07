@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.facebook.AccessToken;
 import com.facebook.login.Login;
 
 import gr.net.maroulis.library.EasySplashScreen;
@@ -18,7 +19,6 @@ public class SplashScreen extends AppCompatActivity {
         EasySplashScreen config = new EasySplashScreen(SplashScreen.this    )
                 .withFullScreen()
                 .withTargetActivity(LoginActivity.class)
-                //TODO: ændre hvis brugeren er logget in
                 .withBackgroundColor(Color.parseColor(getString(R.string.light_blue)))
                 .withLogo(R.drawable.chatroom)
                 .withHeaderText("ChatRoom Til House of Code");

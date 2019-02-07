@@ -2,20 +2,18 @@ package com.example.benjamin_pc.houseofcode;
 
 import android.content.Context;
 import android.content.Intent;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.benjamin_pc.houseofcode.Adapters.ChatMessageAdapter;
+import com.example.benjamin_pc.houseofcode.Models.ChatMessage;
 import com.facebook.Profile;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -90,7 +88,6 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
         Toast.makeText(this, "Kommentar oprettet", Toast.LENGTH_SHORT).show();
         chatmessageRef.addListenerForSingleValueEvent(valueEventListener);
-        //TODO: update
 
     }
 

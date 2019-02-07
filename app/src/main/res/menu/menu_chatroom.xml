@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:icon="@mipmap/ic_launcher_round"
+        android:orderInCategory="4"
+        android:title="Logud"
+        app:showAsAction="never"
+        android:id="@+id/menu_chatroom_signout"
+        android:onClick="Signout"
+        />
+</menu>

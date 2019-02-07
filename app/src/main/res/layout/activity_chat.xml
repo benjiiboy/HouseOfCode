@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ChatActivity"
-    android:orientation="vertical"
-    android:id="@+id/pullToRefresh">
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbarmain"
+        layout="@layout/toolbar_chatroom" />
+
+<android.support.v4.widget.SwipeRefreshLayout
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:id="@+id/pullToRefresh"
+    >
 
     <ListView
         android:id="@+id/chat_ListView"
@@ -15,3 +24,7 @@
         android:isScrollContainer="true"/>
 
 </android.support.v4.widget.SwipeRefreshLayout>
+
+</LinearLayout>
+
+

@@ -2,17 +2,22 @@ package com.example.benjamin_pc.houseofcode;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.firebase.database.ChildEventListener;
+import com.example.benjamin_pc.houseofcode.Adapters.ChatRoomAdapter;
+import com.example.benjamin_pc.houseofcode.Models.ChatRoom;
+import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +36,11 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        //toolbar
+        Toolbar toolbar = findViewById(R.id.toolbarmain);
+        setSupportActionBar(toolbar);
+        setTitle("Chat Rooms");
 
         rootDatabase = FirebaseDatabase.getInstance().getReference();
         chatroomRef = rootDatabase.child("Chatroom");
@@ -64,6 +74,13 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
+    //inflater meny
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_chatroom, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
     public void getData(DataSnapshot dataSnapshot){
         for (DataSnapshot ds : dataSnapshot.getChildren()){
             String desc = ds.child("Description").getValue(String.class);
@@ -87,5 +104,10 @@ public class ChatActivity extends AppCompatActivity {
     }
 
 
-
+    public void Signout(MenuItem item) {
+        LoginManager.getInstance().logOut();
+        Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
 }

@@ -1,11 +1,14 @@
 package com.example.benjamin_pc.houseofcode;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -41,7 +44,8 @@ public class ChatActivity extends AppCompatActivity {
         final ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-             getData(dataSnapshot);
+                ChatRoomList.clear();
+                getData(dataSnapshot);
             }
 
             @Override
@@ -70,7 +74,19 @@ public class ChatActivity extends AppCompatActivity {
             ChatRoomList.add(new ChatRoom(name, desc));
             Log.d("chatlist", desc + " / " + name);
         }
+
+
         mainListView.setAdapter(new ChatRoomAdapter(ChatActivity.this, ChatRoomList));
+
+        mainListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Intent intent = new Intent(getBaseContext(), SpecifikChatRoomActivity.class);
+                ChatRoom chatRoom = ChatRoomList.get(position);
+                intent.putExtra("ChatRoomName", chatRoom.getName());
+                startActivity(intent);
+            }
+        });
     }
 
 }

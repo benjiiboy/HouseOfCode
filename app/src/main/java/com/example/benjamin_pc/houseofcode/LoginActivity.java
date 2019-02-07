@@ -3,6 +3,7 @@ package com.example.benjamin_pc.houseofcode;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -38,18 +39,15 @@ public class LoginActivity extends AppCompatActivity {
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
-                        // App code
 
                     }
 
                     @Override
                     public void onCancel() {
-                        // App code
                     }
 
                     @Override
                     public void onError(FacebookException exception) {
-                        // App code
                     }
                 });
 

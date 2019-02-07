@@ -2,6 +2,7 @@ package com.example.benjamin_pc.houseofcode;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +24,7 @@ public class ChatActivity extends AppCompatActivity {
     private ListView mainListView;
     public static final ArrayList<ChatRoom> ChatRoomList = new ArrayList<>();
     private DatabaseReference rootDatabase, chatroomRef;
+    SwipeRefreshLayout mSwipeRefreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,21 +35,13 @@ public class ChatActivity extends AppCompatActivity {
         chatroomDescription =(TextView) findViewById(R.id.chatroom_txtDescription);
         chatroomName = (TextView) findViewById(R.id.chatroom_txtName);
         mainListView = findViewById(R.id.chat_ListView);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.pullToRefresh);
 
-
-
-
-
-        ValueEventListener valueEventListener = new ValueEventListener() {
+        //Listener to firebase database
+        final ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()){
-                    String desc = ds.child("Description").getValue(String.class);
-                    String name = ds.child("Name").getValue(String.class);
-                    ChatRoomList.add(new ChatRoom(name, desc));
-                    Log.d("chatlist", desc + " / " + name);
-                }
-                mainListView.setAdapter(new ChatRoomAdapter(ChatActivity.this, ChatRoomList));
+             getData(dataSnapshot);
             }
 
             @Override
@@ -57,8 +51,26 @@ public class ChatActivity extends AppCompatActivity {
         };
         chatroomRef.addListenerForSingleValueEvent(valueEventListener);
 
+        //Swipe to refresh
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                ChatRoomList.clear();
+                chatroomRef.addListenerForSingleValueEvent(valueEventListener);
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
 
+    }
 
+    public void getData(DataSnapshot dataSnapshot){
+        for (DataSnapshot ds : dataSnapshot.getChildren()){
+            String desc = ds.child("Description").getValue(String.class);
+            String name = ds.child("Name").getValue(String.class);
+            ChatRoomList.add(new ChatRoom(name, desc));
+            Log.d("chatlist", desc + " / " + name);
+        }
+        mainListView.setAdapter(new ChatRoomAdapter(ChatActivity.this, ChatRoomList));
     }
 
 }

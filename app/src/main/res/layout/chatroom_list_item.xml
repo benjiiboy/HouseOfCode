@@ -5,31 +5,27 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
-        android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_marginRight="20px"
-        android:layout_marginLeft="20px"
         android:layout_height="300px"
-        card_view:cardCornerRadius="4dp"
-        android:layout_marginBottom="30px">
+        android:layout_gravity="center"
+        android:layout_marginLeft="20px"
+        android:layout_marginRight="20px"
+        android:layout_marginBottom="30px"
+        card_view:cardCornerRadius="4dp">
 
         <android.support.v7.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="300px"
-            android:orientation="horizontal"
-            android:layout_marginBottom="5dp">
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal">
 
-            <android.support.v7.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
 
             <android.support.v7.widget.LinearLayoutCompat
 
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <android.support.v7.widget.LinearLayoutCompat
@@ -41,36 +37,40 @@
                         android:id="@+id/chatroom_txtName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/colorPrimary"
                         android:text="Navn"
                         android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:background="@color/colorPrimary"/>
+                        android:textStyle="bold" />
 
                 </android.support.v7.widget.LinearLayoutCompat>
 
-                <TextView
-                    android:id="@+id/chatroom_txtDescription"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="Beskrivelse"
-                    android:layout_marginEnd="24dp"/>
                 <android.support.v7.widget.LinearLayoutCompat
 
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="100">
+
+                <TextView
+                    android:id="@+id/chatroom_txtDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Beskrivelse"
+                    android:layout_weight="6"/>
+
 
                     <TextView
                         android:id="@+id/chatroom_txtChevron"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="94"
+                        android:layout_gravity="center"
                         android:drawableLeft="@drawable/ic_chevron_right_black_24dp" />
                 </android.support.v7.widget.LinearLayoutCompat>
 
+                </android.support.v7.widget.LinearLayoutCompat>
 
 
-            </android.support.v7.widget.LinearLayoutCompat>
 
         </android.support.v7.widget.LinearLayoutCompat>
     </android.support.v7.widget.CardView>

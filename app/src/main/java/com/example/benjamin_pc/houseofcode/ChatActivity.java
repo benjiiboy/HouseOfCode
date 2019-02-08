@@ -18,6 +18,7 @@ import com.example.benjamin_pc.houseofcode.Adapters.ChatRoomAdapter;
 import com.example.benjamin_pc.houseofcode.Models.ChatRoom;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -105,7 +106,13 @@ public class ChatActivity extends AppCompatActivity {
 
     //sig out button
     public void Signout(MenuItem item) {
-        LoginManager.getInstance().logOut();
+
+        //TODO: google logud
+        if (Profile.getCurrentProfile() != null){
+            LoginManager.getInstance().logOut();
+        } else if(FirebaseAuth.getInstance() != null){
+            FirebaseAuth.getInstance().signOut();
+        }
         Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);

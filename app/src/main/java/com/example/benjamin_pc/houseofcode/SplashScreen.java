@@ -16,6 +16,7 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //splashscreen config
         EasySplashScreen config = new EasySplashScreen(SplashScreen.this    )
                 .withFullScreen()
                 .withTargetActivity(LoginActivity.class)

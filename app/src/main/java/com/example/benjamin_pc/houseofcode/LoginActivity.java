@@ -28,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //if user is logged in before go to chatroom
         if (AccessToken.getCurrentAccessToken()!=null){
             Intent intent = new Intent(this, ChatActivity.class);
             startActivity(intent);
@@ -41,7 +42,6 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d("logintest", "onsucces: " + loginResult.toString());
 
                     }
-
 
                     @Override
                     public void onCancel() {

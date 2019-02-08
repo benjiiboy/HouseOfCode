@@ -81,6 +81,7 @@ public class ChatActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    //method to get the datasnapchot from firebase database
     public void getData(DataSnapshot dataSnapshot){
         for (DataSnapshot ds : dataSnapshot.getChildren()){
             String desc = ds.child("Description").getValue(String.class);
@@ -89,9 +90,8 @@ public class ChatActivity extends AppCompatActivity {
             Log.d("chatlist", desc + " / " + name);
         }
 
-
+        //custom adapter to navigate to specific chat room
         mainListView.setAdapter(new ChatRoomAdapter(ChatActivity.this, ChatRoomList));
-
         mainListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -103,7 +103,7 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-
+    //sig out button
     public void Signout(MenuItem item) {
         LoginManager.getInstance().logOut();
         Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();

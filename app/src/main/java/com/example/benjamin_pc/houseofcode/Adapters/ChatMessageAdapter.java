@@ -36,6 +36,7 @@ public class ChatMessageAdapter extends BaseAdapter {
         return 0;
     }
 
+    //set the cardview items to specific values
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
         if (convertView == null){

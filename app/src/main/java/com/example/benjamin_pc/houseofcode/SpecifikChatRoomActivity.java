@@ -71,8 +71,19 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
         });
     }
 
+    //Method to post a message to firebase database using
     public void SendMessage(){
-        String name = Profile.getCurrentProfile().getName();
+
+        //check for google or facebook login name.
+        String name ="";
+        if (Profile.getCurrentProfile().getName() != null)
+        {
+            name = Profile.getCurrentProfile().getName();
+        }
+        else if (false){
+            //TODO: google login
+        }
+
         Date Calanderdate = Calendar.getInstance().getTime();
         Long timeinmilis = Calendar.getInstance().getTimeInMillis();
 
@@ -84,14 +95,16 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
         ChatMessage chatMessage = new ChatMessage(name,date ,text);
         chatmessageRef.child(timeinmilis.toString()).setValue(chatMessage);
         editText.setText("");
+        //Hide keyboard after pressing enter
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+        //Inform user that they posted a message
         Toast.makeText(this, "Kommentar oprettet", Toast.LENGTH_SHORT).show();
         chatmessageRef.addListenerForSingleValueEvent(valueEventListener);
 
     }
 
-
+    //method to get the data snapchot from firebase database
     public void getData(DataSnapshot dataSnapshot){
         for (DataSnapshot ds : dataSnapshot.getChildren()){
             String date = ds.child("date").getValue(String.class);

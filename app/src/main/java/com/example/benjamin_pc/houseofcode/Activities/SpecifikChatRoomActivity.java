@@ -1,4 +1,4 @@
-package com.example.benjamin_pc.houseofcode;
+package com.example.benjamin_pc.houseofcode.Activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.benjamin_pc.houseofcode.Adapters.ChatMessageAdapter;
 import com.example.benjamin_pc.houseofcode.Models.ChatMessage;
+import com.example.benjamin_pc.houseofcode.R;
 import com.facebook.AccessToken;
 import com.facebook.Profile;
 import com.google.firebase.auth.FirebaseAuth;
@@ -96,7 +97,7 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
 
 
         String text = editText.getText().toString();
-        SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/YYYY HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY HH:mm");
         String date = sdf.format(Calanderdate);
 
         ChatMessage chatMessage = new ChatMessage(name,date ,text);

@@ -1,13 +1,11 @@
 package com.example.benjamin_pc.houseofcode;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.facebook.AccessToken;
-import com.facebook.login.Login;
+import com.example.benjamin_pc.houseofcode.Activities.LoginActivity;
 
 import gr.net.maroulis.library.EasySplashScreen;
 

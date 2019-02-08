@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 public class ChatMessageAdapter extends BaseAdapter {
     ArrayList<ChatMessage> ChatMessageList;
     Context context;
+    private int lastPosition = -1;
 
     public ChatMessageAdapter(Context context, ArrayList<ChatMessage> chatmessageList){
         this.context = context;
@@ -36,23 +39,49 @@ public class ChatMessageAdapter extends BaseAdapter {
         return 0;
     }
 
+
+    static class ViewHolder {
+        TextView text;
+        TextView date;
+        TextView name;
+    }
+
     //set the cardview items to specific values
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
+        final View result;
+        ViewHolder holder;
+
+        ChatMessage chatMessage = ChatMessageList.get(position);
+
         if (convertView == null){
             LayoutInflater inflater = LayoutInflater.from(context);
             convertView = inflater.inflate(R.layout.chat_list_item, null);
+
+            //holder to the shown list
+            holder = new ViewHolder();
+            holder.text = (TextView) convertView.findViewById(R.id.chat_txtText);
+            holder.date = (TextView) convertView.findViewById(R.id.chat_txtCreated);
+            holder.name = (TextView) convertView.findViewById(R.id.chat_txtHeadline);
+
+            result = convertView;
+
+            convertView.setTag(holder);
+        } else{
+            holder = (ViewHolder) convertView.getTag();
+            result = convertView;
         }
-        ChatMessage chatMessage = ChatMessageList.get(position);
 
-        //TODO: Hent billede af bruger fra facebook
-        TextView txtName = (TextView) convertView.findViewById(R.id.chat_txtHeadline);
-        TextView txtDate = (TextView) convertView.findViewById(R.id.chat_txtCreated);
-        TextView txtText = (TextView) convertView.findViewById(R.id.chat_txtText);
+        //animation when scrolling
+        Animation animation = AnimationUtils.loadAnimation(context,
+                (position > lastPosition) ? R.anim.load_down_anim : R.anim.load_up_anim );
+        result.startAnimation(animation);
+        lastPosition = position;
 
-        txtName.setText(chatMessage.getName());
-        txtDate.setText(chatMessage.getDate());
-        txtText.setText(chatMessage.getText());
+        holder.name.setText(chatMessage.getName());
+        holder.date.setText(chatMessage.getDate());
+        holder.text.setText(chatMessage.getText());
+        //TODO: Hent billede af bruger
         return convertView;
     }
 }

@@ -1,4 +1,4 @@
-package com.example.benjamin_pc.houseofcode;
+package com.example.benjamin_pc.houseofcode.Activities;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.benjamin_pc.houseofcode.Adapters.ChatRoomAdapter;
 import com.example.benjamin_pc.houseofcode.Models.ChatRoom;
+import com.example.benjamin_pc.houseofcode.R;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;

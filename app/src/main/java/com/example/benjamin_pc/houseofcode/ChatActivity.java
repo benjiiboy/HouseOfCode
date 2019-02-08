@@ -107,7 +107,6 @@ public class ChatActivity extends AppCompatActivity {
     //sig out button
     public void Signout(MenuItem item) {
 
-        //TODO: google logud
         if (Profile.getCurrentProfile() != null){
             LoginManager.getInstance().logOut();
         } else if(FirebaseAuth.getInstance() != null){

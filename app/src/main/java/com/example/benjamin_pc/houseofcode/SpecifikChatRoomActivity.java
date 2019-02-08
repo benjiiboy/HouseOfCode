@@ -14,7 +14,9 @@ import android.widget.Toast;
 
 import com.example.benjamin_pc.houseofcode.Adapters.ChatMessageAdapter;
 import com.example.benjamin_pc.houseofcode.Models.ChatMessage;
+import com.facebook.AccessToken;
 import com.facebook.Profile;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,6 +35,7 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
     private DatabaseReference rootDatabase, chatmessageRef;
     EditText editText;
     ValueEventListener valueEventListener;
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,10 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
         setContentView(R.layout.activity_specifik_chat_room);
         SpecifikListView = findViewById(R.id.specifikchat_ListView);
         editText = (EditText) findViewById(R.id.specifikchat_edittext);
+
+        //get google user instance
+        mAuth = FirebaseAuth.getInstance();
+
 
         Intent intent = getIntent();
         chatroomName = (String) intent.getSerializableExtra("ChatRoomName");
@@ -76,12 +83,12 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
 
         //check for google or facebook login name.
         String name ="";
-        if (Profile.getCurrentProfile().getName() != null)
+        if (AccessToken.getCurrentAccessToken() != null)
         {
             name = Profile.getCurrentProfile().getName();
         }
-        else if (false){
-            //TODO: google login
+        if (mAuth.getCurrentUser() != null){
+            name = mAuth.getCurrentUser().getDisplayName();
         }
 
         Date Calanderdate = Calendar.getInstance().getTime();

@@ -4,10 +4,14 @@ import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+
+import com.example.benjamin_pc.houseofcode.Activities.SpecifikChatRoomActivity;
 
 public class NotificationHelper extends ContextWrapper {
 
@@ -41,11 +45,17 @@ public class NotificationHelper extends ContextWrapper {
         return mManager;
     }
 
-    public NotificationCompat.Builder getChannel1Notification(String title, String message){
+    public NotificationCompat.Builder getChannel1Notification(String title, String message, String chatroomName){
+        Intent resultIntent = new Intent(this, SpecifikChatRoomActivity.class);
+        resultIntent.putExtra("ChatRoomName", chatroomName);
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 1, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         return new NotificationCompat.Builder(getApplicationContext(), channel1ID)
                 .setContentTitle(title)
                 .setContentText(message)
-                .setSmallIcon(R.drawable.chatroom);
+                .setSmallIcon(R.drawable.chatroom)
+                .setAutoCancel(true)
+                .setContentIntent(resultPendingIntent);
     }
 
 }

@@ -86,6 +86,7 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
         };
         chatmessageRef.addListenerForSingleValueEvent(valueEventListener);
 
+        //add button
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -115,6 +116,7 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
 
 
         String text = editText.getText().toString();
+        //format the date
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY HH:mm");
         String date = sdf.format(Calanderdate);
 
@@ -155,9 +157,8 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
                                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                                 for (DataSnapshot child : children){
                                     ChatMessage chatMessageValue = child.getValue(ChatMessage.class);
-                                    //TODO: noti
-                                    sendOnChannel1("Ny Chat besked: " + chatroomName,chatMessageValue.toString());
-                                    //Updates list from database with new messages 
+                                    sendOnChannel1("Ny Chat besked: " + chatroomName,chatMessageValue.toString(), chatroomName);
+                                    //Updates list from database with new messages
                                     MessageList.clear();
                                     getData(dataSnapshot);
 
@@ -216,8 +217,8 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
 
     //notification
 
-    public void sendOnChannel1(String title, String message){
-        android.support.v4.app.NotificationCompat.Builder nb = mNotificationHelper.getChannel1Notification(title,message);
+    public void sendOnChannel1(String title, String message, String chatroomName){
+        android.support.v4.app.NotificationCompat.Builder nb = mNotificationHelper.getChannel1Notification(title,message, chatroomName);
         mNotificationHelper.getManager().notify(1,nb.build());
     }
 }

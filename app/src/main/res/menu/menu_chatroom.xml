@@ -5,7 +5,7 @@
 
     <item
         android:icon="@mipmap/ic_launcher_round"
-        android:orderInCategory="4"
+        android:orderInCategory="1"
         android:title="Logud"
         app:showAsAction="never"
         android:id="@+id/menu_chatroom_signout"

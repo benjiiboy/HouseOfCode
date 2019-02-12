@@ -6,13 +6,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
-import android.support.v4.media.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,9 +33,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -60,6 +57,7 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
         SpecifikListView = findViewById(R.id.specifikchat_ListView);
         editText = (EditText) findViewById(R.id.specifikchat_edittext);
 
+
         //get google user instance
         mAuth = FirebaseAuth.getInstance();
 
@@ -70,8 +68,13 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
         rootDatabase = FirebaseDatabase.getInstance().getReference();
         chatmessageRef = rootDatabase.child("ChatroomMessage").child(chatroomName);
 
+        //toolbar
+        Toolbar toolbar = findViewById(R.id.toolbarmain);
+        setSupportActionBar(toolbar);
+        setTitle(chatroomName);
 
-        //Listener to firebase database
+
+        //Read data  from firebase database
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -90,7 +93,7 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                SendMessage();
+                sendMessage();
                 return true;
             }
         });
@@ -98,38 +101,15 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
 
     }
 
-    //Method to post a message to firebase database using
-    public void SendMessage(){
+    //inflater meny
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_specificchat, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
-        //check for google or facebook login name.
-        String name ="";
-        if (AccessToken.getCurrentAccessToken() != null)
-        {
-            name = Profile.getCurrentProfile().getName();
-        }
-        if (mAuth.getCurrentUser() != null){
-            name = mAuth.getCurrentUser().getDisplayName();
-        }
-
-        Date Calanderdate = Calendar.getInstance().getTime();
-        Long timeinmilis = Calendar.getInstance().getTimeInMillis();
-
-
-        String text = editText.getText().toString();
-        //format the date
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY HH:mm");
-        String date = sdf.format(Calanderdate);
-
-        ChatMessage chatMessage = new ChatMessage(name,date ,text);
-        chatmessageRef.child(timeinmilis.toString()).setValue(chatMessage);
-        editText.setText("");
-        //Hide keyboard after pressing enter
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-        //Inform user that they posted a message
-        Toast.makeText(this, "Kommentar oprettet", Toast.LENGTH_SHORT).show();
-        chatmessageRef.addListenerForSingleValueEvent(valueEventListener);
-
+    public void subscribeToChannel(){
+        //custom dialog box
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 
         // Set Custom Title
@@ -156,8 +136,9 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                                 for (DataSnapshot child : children){
+                                    //Gets new comment from firebase database
                                     ChatMessage chatMessageValue = child.getValue(ChatMessage.class);
-                                    sendOnChannel1("Ny Chat besked: " + chatroomName,chatMessageValue.toString(), chatroomName);
+                                    sendOnChannel1("Ny Chat besked: " + chatroomName,chatMessageValue.getText(), chatroomName);
                                     //Updates list from database with new messages
                                     MessageList.clear();
                                     getData(dataSnapshot);
@@ -167,7 +148,6 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
-
                             }
                         });
 
@@ -198,6 +178,46 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
         cancelBT.setTextColor(Color.RED);
         cancelBT.setLayoutParams(negBtnLP);
         cancelBT.setText("Nej tak!");
+
+    }
+
+
+    //Method to post a message to firebase database using
+    public void sendMessage(){
+
+        //check for google or facebook login name.
+        String name ="";
+
+        if (AccessToken.getCurrentAccessToken() != null)
+        {
+            name = Profile.getCurrentProfile().getName();
+        }
+        if (mAuth.getCurrentUser() != null){
+            name = mAuth.getCurrentUser().getDisplayName();
+        }
+
+        Date Calanderdate = Calendar.getInstance().getTime();
+        Long timeinmilis = Calendar.getInstance().getTimeInMillis();
+
+
+        String text = editText.getText().toString();
+        //format the date
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY HH:mm");
+        String date = sdf.format(Calanderdate);
+
+        ChatMessage chatMessage = new ChatMessage(name,date ,text);
+        chatmessageRef.child(timeinmilis.toString()).setValue(chatMessage);
+        editText.setText("");
+        //Hide keyboard after pressing enter
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+
+        subscribeToChannel();
+
+        //Inform user that they posted a message
+        Toast.makeText(this, "Kommentar oprettet", Toast.LENGTH_SHORT).show();
+        chatmessageRef.addListenerForSingleValueEvent(valueEventListener);
+
 
     }
 

@@ -106,6 +106,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onError(FacebookException exception) {
                         Log.d("logintest", "onError: " + exception.toString());
+                        Toast.makeText(LoginActivity.this, "Fejl: " + exception.toString(), Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -159,6 +160,7 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Fejl: " + task.getException(), Toast.LENGTH_LONG).show();
 
                         }
                     }

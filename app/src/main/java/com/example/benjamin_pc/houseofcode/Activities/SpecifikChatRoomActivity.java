@@ -1,19 +1,29 @@
 package com.example.benjamin_pc.houseofcode.Activities;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v4.media.app.NotificationCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.benjamin_pc.houseofcode.Adapters.ChatMessageAdapter;
 import com.example.benjamin_pc.houseofcode.Models.ChatMessage;
+import com.example.benjamin_pc.houseofcode.NotificationHelper;
 import com.example.benjamin_pc.houseofcode.R;
 import com.facebook.AccessToken;
 import com.facebook.Profile;
@@ -23,6 +33,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,6 +51,8 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
     ValueEventListener valueEventListener;
     FirebaseAuth mAuth;
 
+    private NotificationHelper mNotificationHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +63,7 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
         //get google user instance
         mAuth = FirebaseAuth.getInstance();
 
+        mNotificationHelper = new NotificationHelper(this);
 
         Intent intent = getIntent();
         chatroomName = (String) intent.getSerializableExtra("ChatRoomName");
@@ -77,6 +93,8 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+
     }
 
     //Method to post a message to firebase database using
@@ -110,9 +128,79 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
         Toast.makeText(this, "Kommentar oprettet", Toast.LENGTH_SHORT).show();
         chatmessageRef.addListenerForSingleValueEvent(valueEventListener);
 
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+
+        // Set Custom Title
+        TextView title = new TextView(this);
+        // Title Properties
+        title.setText("Vil du subscribe til: " + chatroomName + " ?");
+        title.setPadding(10, 10, 10, 10);   // Set Position
+        title.setGravity(Gravity.CENTER);
+        title.setTextColor(Color.BLACK);
+        title.setTextSize(20);
+        alertDialog.setCustomTitle(title);
+
+        // Set Button
+        // you can more buttons
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // Perform Action on Button
+
+                FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                DatabaseReference reference = firebaseDatabase.getReference();
+                reference.child("ChatroomMessage").child(chatroomName)
+                        .addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                                for (DataSnapshot child : children){
+                                    ChatMessage chatMessageValue = child.getValue(ChatMessage.class);
+                                    //TODO: noti
+                                    sendOnChannel1("Ny Chat besked: " + chatroomName,chatMessageValue.toString());
+                                    //Updates list from database with new messages 
+                                    MessageList.clear();
+                                    getData(dataSnapshot);
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+            }
+        });
+
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // Perform Action on Button
+            }
+        });
+
+        new Dialog(getApplicationContext());
+        alertDialog.show();
+
+        // Set Properties for OK Button
+        final Button okBT = alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
+        LinearLayout.LayoutParams neutralBtnLP = (LinearLayout.LayoutParams) okBT.getLayoutParams();
+        neutralBtnLP.gravity = Gravity.FILL_HORIZONTAL;
+        okBT.setPadding(50, 10, 10, 10);   // Set Position
+        okBT.setTextColor(Color.GREEN);
+        okBT.setLayoutParams(neutralBtnLP);
+        okBT.setText("Ja tak!");
+
+        final Button cancelBT = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+        LinearLayout.LayoutParams negBtnLP = (LinearLayout.LayoutParams) okBT.getLayoutParams();
+        negBtnLP.gravity = Gravity.FILL_HORIZONTAL;
+        cancelBT.setTextColor(Color.RED);
+        cancelBT.setLayoutParams(negBtnLP);
+        cancelBT.setText("Nej tak!");
+
     }
 
-    //method to get the data snapchot from firebase database
+    //method to get the data snapshot from firebase database
     public void getData(DataSnapshot dataSnapshot){
         for (DataSnapshot ds : dataSnapshot.getChildren()){
             String date = ds.child("date").getValue(String.class);
@@ -123,5 +211,13 @@ public class SpecifikChatRoomActivity extends AppCompatActivity {
 
         SpecifikListView.setAdapter(new ChatMessageAdapter(SpecifikChatRoomActivity.this, MessageList));
 
+    }
+
+
+    //notification
+
+    public void sendOnChannel1(String title, String message){
+        android.support.v4.app.NotificationCompat.Builder nb = mNotificationHelper.getChannel1Notification(title,message);
+        mNotificationHelper.getManager().notify(1,nb.build());
     }
 }
